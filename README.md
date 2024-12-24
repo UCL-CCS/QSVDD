@@ -1,10 +1,10 @@
 # PyTorch Implementation of Quantum SVDD
-This repository provides a [PyTorch](https://pytorch.org/) implementation of the *Quantum SVDD* method presented in our 2024 paper ”A Practical Quantum Anomaly Detection Method with Enhanced Expressivity on Quantum Processors”.
+This repository provides a [PyTorch](https://pytorch.org/) implementation of the *Quantum SVDD* method presented in our 2024 paper ”A Parameter-Efficient Quantum Anomaly Detection Method on a Superconducting Quantum Processor”.
 
 
 ## Citation and Contact
-You find a PDF of the A Practical Quantum Anomaly Detection Method with Enhanced Expressivity on Quantum Processors paper at 
-[http://].
+You find a PDF of the A Parameter-Efficient Quantum Anomaly Detection Method on a Superconducting Quantum Processor paper at 
+[[http://](https://arxiv.org/abs/2412.16867)].
 
 If you use our work, please also cite the paper:
 ```
@@ -15,17 +15,8 @@ If you would like to get in touch, please contact [maida.wang.24@ucl.ac.uk](mail
 
 
 ## Abstract
-Quantum computing has gained attention for its potential to address computational challenges. 
-Its integration with emerging computing paradigms has contributed to quantum machine learning development. 
-However, whether algorithms for real-world tasks can effectively operate on current quantum hardware, exhibiting quantum advantage, remains a critical question in quantum machine learning. 
-In this work, we propose Quantum Support Vector Data Description (QSVDD) for practical anomaly detection. 
-We introduce the concept of expressivity in our theoretical analysis, deriving a covering number bound to characterize the model's performance. 
-Simulation results indicate that QSVDD demonstrates favorable recognition capabilities compared to classical baselines, 
-achieving an average accuracy of over 90\% on benchmarks using ten qubits with significantly fewer trainable parameters. 
-Furthermore, we first develop an implementation pipeline for QSVDD and conduct experiments on quantum processors, 
-achieving an accuracy above 80\% with four qubits. 
-This work aims to advance the application of quantum machine learning in anomaly detection, 
-highlighting its feasibility in the noisy intermediate-scale quantum era.
+Quantum machine learning has gained attention for its potential to address computational challenges. However, whether those algorithms can effectively solve practical problems and outperform their classical counterparts, especially on current quantum hardware, remains a critical question. In this work, we propose a novel quantum machine learning method, called Quantum Support Vector Data Description (QSVDD), for practical anomaly detection, which aims to achieve both parameter efficiency and superior accuracy compared to classical models.  Emulation results indicate that QSVDD demonstrates favourable recognition capabilities compared to classical baselines, achieving an average accuracy of over 90% on benchmarks with significantly fewer trainable parameters. Theoretical analysis confirms that QSVDD has a comparable expressivity to classical counterparts while requiring only a fraction of the parameters.
+Furthermore, we demonstrate the first implementation of a quantum machine learning method for anomaly detection on a superconducting quantum processor. Specifically, we achieve an accuracy of over 80% with only 16 parameters on the device, providing initial evidence of QSVDD's practical viability in the noisy intermediate-scale quantum era and highlighting its significant reduction in parameter requirements.
 
 
 ## Installation
@@ -103,8 +94,7 @@ This example trains a Quantum SVDD model where cats (`--normal_class 3`) are con
 Autoencoder pretraining is used for parameter initialization.
 
 ## Experiments
-We have already run QSVDD on several different quantum devices, including IBM, Zuchongzhi, and VQS. We also plan to implement this method on more chips in the future.
-Nevertheless, it is not possible to provide any specific codes for the hardware until such time as the relevant parties have given their approval.
+We can run QSVDD on several different quantum devices, including superconducting processors and photonic processors. We also plan to implement this method on more chips in the future.
 If any academic organization has hardware and would like to run the algorithm on their hardware, they can contact the authors.
 
 
