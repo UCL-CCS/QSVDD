@@ -3,12 +3,12 @@ import torch
 
 from base.base_dataset import BaseADDataset
 from networks.main import build_network, build_autoencoder
-from optim.deepSVDD_trainer import DeepSVDDTrainer
+from optim.QuantumSVDD_trainer import QuantumSVDDTrainer
 from optim.ae_trainer import AETrainer
 
 
-class DeepSVDD(object):
-    """Deep SVDD方法的一个类。
+class QuantumSVDD(object):
+    """Quantum SVDD方法的一个类。
 
     属性:
         objective: 指定深度SVDD目标的字符串（“一个类”或“软边界”）.
@@ -18,7 +18,7 @@ class DeepSVDD(object):
         net_name: 一个字符串，指示要使用的神经网络的名称.
         net: 神经网络 \phi.
         ae_net: 对应于网络权重预训练的\phi的自动编码器网络。
-        trainer: DeepSVDDTrainer 训练一个 Deep SVDD 模型.
+        trainer: QuantumSVDDTrainer 训练一个 Quantum SVDD 模型.
         optimizer_name: 一个字符串，指示用于训练深层SVDD网络的优化器.
         ae_trainer: AETrainer 在训练前训练自动编码器.
         ae_optimizer_name: 一个字符串，指示用于预训练自动编码器的优化器.
@@ -26,7 +26,7 @@ class DeepSVDD(object):
     """
 
     def __init__(self, objective: str = 'one-class', nu: float = 0.1):
-        """Inits DeepSvd具有两个目标之一和超参数nu."""
+        """Inits QuantumSvd具有两个目标之一和超参数nu."""
 
         assert objective in ('one-class', 'soft-boundary'), "目标必须是“一类”或“软边界”'."
         self.objective = objective
