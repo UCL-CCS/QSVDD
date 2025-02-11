@@ -117,7 +117,7 @@ This example trains a Quantum SVDD model where cats (`--normal_class 3`) are con
 Autoencoder pretraining is used for parameter initialization.
 
 ## Experiments
-We can run QSVDD on several different quantum devices, including superconducting processors and photonic processors (IBM IQM Quafu Quanta). We also plan to implement this method on more and larger scale chips in the future.
+We can run QSVDD on several different quantum devices, including superconducting processors and photonic processors (IBM IQM Quafu). We also plan to implement this method on more and larger scale chips in the future.
 If any academic organization has hardware and would like to run the algorithm on their hardware, please contact the authors.
 
 
