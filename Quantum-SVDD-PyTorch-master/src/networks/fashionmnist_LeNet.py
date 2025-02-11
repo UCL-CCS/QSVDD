@@ -214,7 +214,7 @@ class FashionMNIST_LeNet_Autoencoder(BaseNet):
         self.rep_dim = n_qubits#16
         self.pool = nn.MaxPool2d(2, 2)
         self.pool2 = nn.MaxPool2d(7, 7)
-        # 编码器（必须与上面的深度SVDD网络匹配）Encoder (must match the Deep SVDD network above)
+        # 编码器（必须与上面的量子SVDD网络匹配）Encoder (must match the quantum SVDD network above)
         self.conv1 = nn.Conv2d(1, 8, 5, bias=False, padding=2)#第一个卷积层
         self.bn1 = nn.BatchNorm2d(8, eps=1e-04, affine=False)#第一个bn层：BN层能够让网络更快收敛、而且对不同的学习率鲁棒
         self.conv2 = nn.Conv2d(8, 2, 5, bias=False, padding=2)#第二个卷积层self.conv2 = nn.Conv2d(8, 4, 5, bias=False, padding=2)
