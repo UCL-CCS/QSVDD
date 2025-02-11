@@ -190,14 +190,14 @@ class MNIST_LeNet_Autoencoder(BaseNet):
         self.pool = nn.MaxPool2d(2, 2)
         self.pool2 = nn.MaxPool2d(7, 7)
 
-        #编码器（必须与上面的深度SVDD网络匹配）Encoder (must match the Deep SVDD network above)
+        #编码器（必须与上面的量子SVDD网络匹配）Encoder (must match the Quantum SVDD network above)
         self.conv1 = nn.Conv2d(1, 8, 5, bias=False, padding=2)#第一个卷积层
         self.bn1 = nn.BatchNorm2d(8, eps=1e-04, affine=False)#第一个bn层：BN层能够让网络更快收敛、而且对不同的学习率鲁棒
         self.conv2 = nn.Conv2d(8, 2, 5, bias=False, padding=2)#第二个卷积层self.conv2 = nn.Conv2d(8, 4, 5, bias=False, padding=2)
         self.bn2 = nn.BatchNorm2d(2, eps=1e-04, affine=False)#self.bn2 = nn.BatchNorm2d(4, eps=1e-04, affine=False)
-        #self.qnn = TorchConnector(qnn4)
+        self.qnn = Quantumnet()
         self.fc1 = nn.Linear(2*7*7, 64, bias=False)#全连接层（输入，输出，bias）self.fc1 = nn.Linear(4 * 7 * 7, self.rep_dim, bias=False)
-        self.Q_conv = Quantumnet()
+        #self.Q_conv = Quantumnet()
         # self.Q_linear = Quantumnet2()
         self.fc2 = nn.Linear(64, self.rep_dim, bias=False)
         # Decoder
@@ -214,7 +214,7 @@ class MNIST_LeNet_Autoencoder(BaseNet):
         # x = self.pool(F.leaky_relu(self.bn1(x)))
         # x = self.conv2(x)
         # x = self.pool(F.leaky_relu(self.bn2(x)))
-        # x = x.view(x.size(0), -1)
+         x = x.view(x.size(0), -1)
         # x = self.fc1(x)
         x = self.qnn(x)
         #x = self.Q_linear(x)
