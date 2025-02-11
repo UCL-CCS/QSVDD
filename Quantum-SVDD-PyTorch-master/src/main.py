@@ -6,7 +6,7 @@ import numpy as np
 
 from utils.config import Config
 from utils.visualization.plot_images_grid import plot_images_grid
-from deepSVDD import DeepSVDD
+from QuantumSVDD import QuantumSVDD
 from datasets.main import load_dataset
 
 
@@ -23,20 +23,20 @@ from datasets.main import load_dataset
 @click.option('--load_model', type=click.Path(exists=True), default=None,
               help='Model file path (default: None).')
 @click.option('--objective', type=click.Choice(['one-class', 'soft-boundary']), default='one-class',
-              help='Specify Deep SVDD objective ("one-class" or "soft-boundary").')
-@click.option('--nu', type=float, default=0.1, help='Deep SVDD hyperparameter nu (must be 0 < nu <= 1).')
+              help='Specify Quantum SVDD objective ("one-class" or "soft-boundary").')
+@click.option('--nu', type=float, default=0.1, help='Quantum SVDD hyperparameter nu (must be 0 < nu <= 1).')
 @click.option('--device', type=str, default='cuda', help='Computation device to use ("cpu", "cuda", "cuda:2", etc.).')
 @click.option('--seed', type=int, default=-1, help='Set seed. If -1, use randomization.')
 @click.option('--optimizer_name', type=click.Choice(['adam', 'amsgrad']), default='adam',
-              help='Name of the optimizer to use for Deep SVDD network training.')
+              help='Name of the optimizer to use for Quantum SVDD network training.')
 @click.option('--lr', type=float, default=0.001,
-              help='Initial learning rate for Deep SVDD network training. Default=0.001')
+              help='Initial learning rate for Quantum SVDD network training. Default=0.001')
 @click.option('--n_epochs', type=int, default=50, help='Number of epochs to train.')
 @click.option('--lr_milestone', type=int, default=0, multiple=True,
               help='Lr scheduler milestones at which lr is multiplied by 0.1. Can be multiple and must be increasing.')
 @click.option('--batch_size', type=int, default=128, help='Batch size for mini-batch training.')
 @click.option('--weight_decay', type=float, default=1e-6,
-              help='Weight decay (L2 penalty) hyperparameter for Deep SVDD objective.')
+              help='Weight decay (L2 penalty) hyperparameter for Quantum SVDD objective.')
 @click.option('--pretrain', type=bool, default=True,
               help='Pretrain neural network parameters via autoencoder.')
 @click.option('--ae_optimizer_name', type=click.Choice(['adam', 'amsgrad']), default='adam',
@@ -57,7 +57,7 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, ob
          optimizer_name, lr, n_epochs, lr_milestone, batch_size, weight_decay, pretrain, ae_optimizer_name, ae_lr,
          ae_n_epochs, ae_lr_milestone, ae_batch_size, ae_weight_decay, n_jobs_dataloader, normal_class):
     """
-    Deep SVDD, a fully deep method for anomaly detection.
+    Quantum SVDD, a fully Quantum method for anomaly detection.
 
     :arg DATASET_NAME: Name of the dataset to load.
     :arg NET_NAME: Name of the neural network to use.
@@ -94,7 +94,7 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, ob
         logger.info('Loaded configuration from %s.' % load_config)
 
     # Print configuration
-    logger.info('Deep SVDD objective: %s' % cfg.settings['objective'])
+    logger.info('Quantum SVDD objective: %s' % cfg.settings['objective'])
     logger.info('Nu-paramerter: %.2f' % cfg.settings['nu'])
 
     # Set seed
@@ -113,12 +113,12 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, ob
     # Load data
     dataset = load_dataset(dataset_name, data_path, normal_class)
 
-    # Initialize DeepSVDD model and set neural network \phi
-    deep_SVDD = DeepSVDD(cfg.settings['objective'], cfg.settings['nu'])
-    deep_SVDD.set_network(net_name)
-    # If specified, load Deep SVDD model (radius R, center c, network weights, and possibly autoencoder weights)
+    # Initialize QuantumSVDD model and set neural network \phi
+    Quantum_SVDD = QuantumSVDD(cfg.settings['objective'], cfg.settings['nu'])
+    Quantum_SVDD.set_network(net_name)
+    # If specified, load Quantum SVDD model (radius R, center c, network weights, and possibly autoencoder weights)
     if load_model:
-        deep_SVDD.load_model(model_path=load_model, load_ae=True)
+        Quantum_SVDD.load_model(model_path=load_model, load_ae=True)
 
         logger.info('Loading model from %s.' % load_model)
 
@@ -133,7 +133,7 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, ob
         logger.info('Pretraining weight decay: %g' % cfg.settings['ae_weight_decay'])
 
         # Pretrain model on dataset (via autoencoder)
-        deep_SVDD.pretrain(dataset,
+        Quantum_SVDD.pretrain(dataset,
                            optimizer_name=cfg.settings['ae_optimizer_name'],
                            lr=cfg.settings['ae_lr'],
                            n_epochs=cfg.settings['ae_n_epochs'],
@@ -152,7 +152,7 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, ob
     logger.info('Training weight decay: %g' % cfg.settings['weight_decay'])
 
     # Train model on dataset
-    deep_SVDD.train(dataset,
+    Quantum_SVDD.train(dataset,
                     optimizer_name=cfg.settings['optimizer_name'],
                     lr=cfg.settings['lr'],
                     n_epochs=cfg.settings['n_epochs'],
@@ -163,10 +163,10 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, ob
                     n_jobs_dataloader=n_jobs_dataloader)
 
     # Test model
-    deep_SVDD.test(dataset, device=device, n_jobs_dataloader=n_jobs_dataloader)
+    Quantum_SVDD.test(dataset, device=device, n_jobs_dataloader=n_jobs_dataloader)
 
     # Plot most anomalous and most normal (within-class) test samples
-    indices, labels, scores = zip(*deep_SVDD.results['test_scores'])
+    indices, labels, scores = zip(*Quantum_SVDD.results['test_scores'])
     indices, labels, scores = np.array(indices), np.array(labels), np.array(scores)
     idx_sorted = indices[labels == 0][np.argsort(scores[labels == 0])]  # sorted from lowest to highest anomaly score
 
