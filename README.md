@@ -1,10 +1,10 @@
 # PyTorch Implementation of Quantum SVDD
-This repository provides a [PyTorch](https://pytorch.org/) implementation of the *Quantum SVDD* method presented in our 2024 paper ”A Practical Quantum Anomaly Detection Method with Enhanced Expressivity on Quantum Processors”.
+This repository provides a [PyTorch](https://pytorch.org/) implementation of the *Quantum SVDD* method presented in our 2024 paper ”A Parameter-Efficient Quantum Anomaly Detection Method on a Superconducting Quantum Processor”.
 
 
 ## Citation and Contact
-You find a PDF of the A Practical Quantum Anomaly Detection Method with Enhanced Expressivity on Quantum Processors paper at 
-[http://].
+You can find a PDF of the A Parameter-Efficient Quantum Anomaly Detection Method on a Superconducting Quantum Processor paper at 
+[[http://](https://arxiv.org/abs/2412.16867)].
 
 If you use our work, please also cite the paper:
 ```
@@ -15,17 +15,12 @@ If you would like to get in touch, please contact [maida.wang.24@ucl.ac.uk](mail
 
 
 ## Abstract
-Quantum computing has gained attention for its potential to address computational challenges. 
-Its integration with emerging computing paradigms has contributed to quantum machine learning development. 
-However, whether algorithms for real-world tasks can effectively operate on current quantum hardware, exhibiting quantum advantage, remains a critical question in quantum machine learning. 
-In this work, we propose Quantum Support Vector Data Description (QSVDD) for practical anomaly detection. 
-We introduce the concept of expressivity in our theoretical analysis, deriving a covering number bound to characterize the model's performance. 
-Simulation results indicate that QSVDD demonstrates favorable recognition capabilities compared to classical baselines, 
-achieving an average accuracy of over 90\% on benchmarks using ten qubits with significantly fewer trainable parameters. 
-Furthermore, we first develop an implementation pipeline for QSVDD and conduct experiments on quantum processors, 
-achieving an accuracy above 80\% with four qubits. 
-This work aims to advance the application of quantum machine learning in anomaly detection, 
-highlighting its feasibility in the noisy intermediate-scale quantum era.
+Quantum machine learning has gained attention for its potential to address computational challenges. However, whether those algorithms can effectively solve practical problems and outperform their classical counterparts, especially on current quantum hardware, remains a critical question. In this work, we propose a novel quantum machine learning method, called Quantum Support Vector Data Description (QSVDD), for practical image anomaly detection, which aims to achieve both parameter efficiency and superior accuracy compared to classical models.  Emulation results indicate that QSVDD demonstrates favourable recognition capabilities compared to classical baselines, achieving an average accuracy of over 90% on benchmarks with significantly fewer trainable parameters. Theoretical analysis confirms that QSVDD has a comparable expressivity to classical counterparts while requiring only a fraction of the parameters.
+Furthermore, we demonstrate the first implementation of a quantum anomaly detection method for general image datasets on a superconducting quantum processor. Specifically, we achieve an accuracy of over 80% with only 16 parameters on the device, providing initial evidence of QSVDD's practical viability in the noisy intermediate-scale quantum era and highlighting its significant reduction in parameter requirements.
+
+![QSVDD on processor(only)](https://github.com/user-attachments/assets/ba85a024-9de5-4c66-a667-13b902d57039)
+
+
 
 
 ## Installation
@@ -33,7 +28,7 @@ This code is written in `Python 3.8` and requires the packages listed in `requir
 
 Clone the repository to your local machine and directory of choice:
 ```
-git clone https://github.com/MaidaWang/QSVDD.git
+[git clone https://github.com/UCL-CCS/QSVDD.git]
 ```
 
 To run the code, we recommend setting up a virtual environment, e.g. using `virtualenv` or `conda`:
@@ -60,7 +55,7 @@ while read requirement; do conda install -n myenv --yes $requirement; done < req
 
 We currently have implemented the MNIST ([http://yann.lecun.com/exdb/mnist/](http://yann.lecun.com/exdb/mnist/)) and 
 CIFAR-10 ([https://www.cs.toronto.edu/~kriz/cifar.html](https://www.cs.toronto.edu/~kriz/cifar.html)) datasets and 
-FashionMNIST datasets.
+FashionMNIST datasets ([https://github.com/zalandoresearch/fashion-mnist](https://github.com/zalandoresearch/fashion-mnist)).
 
 Have a look into `main.py` for all possible arguments and options.
 
@@ -78,10 +73,29 @@ mkdir log/mnist_test
 cd src
 
 # run simulation
-python main.py mnist mnist_LeNet ../log/mnist_test ../data --objective one-class --lr 0.0001 --n_epochs 150 --lr_milestone 50 --batch_size 200 --weight_decay 0.5e-6 --pretrain True --ae_lr 0.0001 --ae_n_epochs 150 --ae_lr_milestone 50 --ae_batch_size 200 --ae_weight_decay 0.5e-3 --normal_class 1;
+python main.py mnist mnist_LeNet ../log/mnist_test ../data --objective one-class --lr 0.0001 --n_epochs 150 --lr_milestone 50 --batch_size 200 --weight_decay 0.5e-6 --pretrain True --ae_lr 0.0001 --ae_n_epochs 150 --ae_lr_milestone 50 --ae_batch_size 200 --ae_weight_decay 0.5e-3 --normal_class 3;
 ```
 This example trains a Quantum SVDD model where digit 3 (`--normal_class 3`) is considered to be the normal class. Autoencoder
 pretraining is used for parameter initialization.
+
+### FashionMNIST example
+```
+cd <path-to-Quantum-SVDD-directory>
+
+# activate virtual environment
+source myenv/bin/activate  # or 'source activate myenv' for conda
+
+# create folder for experimental output
+mkdir log/FashionMNIST_test
+
+# change to source directory
+cd src
+
+# run simulation
+python main.py FashionMNIST FashionMNIST_LeNet ../log/FashionMNIST_test ../data --objective one-class --lr 0.0001 --n_epochs 150 --lr_milestone 50 --batch_size 200 --weight_decay 0.5e-6 --pretrain True --ae_lr 0.0001 --ae_n_epochs 350 --ae_lr_milestone 250 --ae_batch_size 200 --ae_weight_decay 0.5e-6 --normal_class 3;
+```
+This example trains a Quantum SVDD model where cloth (`--normal_class 3`) is considered to be the normal class. 
+Autoencoder pretraining is used for parameter initialization.
 
 ### CIFAR-10 example
 ```
@@ -103,10 +117,9 @@ This example trains a Quantum SVDD model where cats (`--normal_class 3`) are con
 Autoencoder pretraining is used for parameter initialization.
 
 ## Experiments
-We have already run QSVDD on several different quantum devices, including IBM, Zuchongzhi, and VQS. We also plan to implement this method on more chips in the future.
-Nevertheless, it is not possible to provide any specific codes for the hardware until such time as the relevant parties have given their approval.
-If any academic organization has hardware and would like to run the algorithm on their hardware, they can contact the authors.
+We can run QSVDD on several different quantum devices, including superconducting processors and photonic processors (IBM IQM Quafu Quanta). We also plan to implement this method on more and larger scale chips in the future.
+If any academic organization has hardware and would like to run the algorithm on their hardware, please contact the authors.
 
 
 ## License
-UCL
+MIT
